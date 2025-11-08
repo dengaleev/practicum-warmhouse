@@ -8,7 +8,7 @@
 
 Чтобы составить документ с описанием текущей архитектуры приложения, можно часть информации взять из описания компании и условия задания. Это нормально.
 
-</aside
+</aside>
 
 ### 1. Описание функциональности монолитного приложения
 
@@ -61,19 +61,9 @@
 
 ### 5. Визуализация контекста системы — диаграмма С4
 
-Добавьте сюда диаграмму контекста в модели C4.
+[Диаграмма контекста в модели C4.](https://www.plantuml.com/plantuml/png/L8rDQyCm38Rl_XLfJXciCOEU1eEL4DYW6u6qZ9s2wuh547yWoopxzvDW7_JqMe_rFdhCP92ANzJcjN-Rkjqq7jyF_SETKXiNx58kKCr4ATzhZUQp_N0qbtF9W3O6Wa2jZLwdnGIHR3DT5dVMtMux23gz7BGtcG0PJPqqLcgJd5C3O8wX4TLjLPyuQixwvlU3mCx1MMS2u-FVyBEanY_M-YPxWpH73un7ULTFF5mlJVrA3MS2D5GGzic9yXzK--5PAXpVRPBH3O8m68HNwIZEu0poPfo1jWy-O7G47roW8JPKbBB2_Hjv_P442M_axlZk-8F14s-v6RJe493mGQOKyH8hZcgYARR4WZWvCz4ZC9KCxSY74L5gDRtKqfGP--hu-yxbN3mmbYJQqiYtd44ogcLgf4pgDjWJJExYJ2lwNOVtP5yvCqmao_rsuebd5pBz2pfj36fmoxnvmLkVJ_dC-fcj5y60GHf4WxovMXrn_zTZDGjtrUd0_-8B)
 
-Чтобы добавить ссылку в файл Readme.md, нужно использовать синтаксис Markdown. Это делают так:
-
-```markdown
-[Текст ссылки](URL)
-```
-
-Замените `Текст ссылки` текстом, который хотите использовать для ссылки. Вместо `URL` вставьте адрес, на который должна вести ссылка. Например:
-
-```markdown
-[Посетите Яндекс](https://ya.ru/)
-```
+Исходный `PlantUML` файл диаграммы контекста находится в [docs/monolithic.puml](docs/monolithic.puml).
 
 # Задание 2. Проектирование микросервисной архитектуры
 

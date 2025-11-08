@@ -1,0 +1,19 @@
+@startuml monolithic
+
+!NEW_C4_STYLE=1
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(user, "User", "")
+Person(technician, "Technician", "")
+
+System(smarthome, "Smart Home", "")
+
+System_Ext(temperatureApi, "Temperature API", "API для взаимодействия с датчиками температуры")
+
+Rel(user, smarthome, "Управляет и проверяет температуру")
+Rel(technician, smarthome, "Подключает систему пользователя")
+
+Rel(smarthome, temperatureApi, "Получает данные о температуре от датчиков")
+
+@enduml
