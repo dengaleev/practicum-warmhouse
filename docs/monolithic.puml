@@ -9,7 +9,7 @@ Person(technician, "Technician", "")
 
 System(smarthome, "Smart Home", "")
 
-System_Ext(temperatureApi, "Temperature API", "API для взаимодействия с датчиками температуры")
+System_Ext(temperatureApi, "Temperature Sensor", "API для взаимодействия с датчиками температуры")
 
 Rel(user, smarthome, "Управляет и проверяет температуру")
 Rel(technician, smarthome, "Подключает систему пользователя")

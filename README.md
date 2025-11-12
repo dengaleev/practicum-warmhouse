@@ -49,7 +49,13 @@
 
 ### 3. Определение доменов и границы контекстов
 
-Опишите здесь домены, которые вы выделили.
+Домены:
+1. Устройства. Управление жизненным циклом устройства: создание, изменение, удаление.
+2. Мониторинг температуры. Сбор и предоставление данных о температуре с устройств.
+3. Интеграция с устройствами. Взаимодействие с физическими устройствами для получения данных о температуре и управления ими.
+
+Границы контекстов:
+
 
 ### **4. Проблемы монолитного решения**
 
@@ -61,7 +67,7 @@
 
 ### 5. Визуализация контекста системы — диаграмма С4
 
-[Диаграмма контекста в модели C4.](https://www.plantuml.com/plantuml/png/L8rDQyCm38Rl_XLfJXciCOEU1eEL4DYW6u6qZ9s2wuh547yWoopxzvDW7_JqMe_rFdhCP92ANzJcjN-Rkjqq7jyF_SETKXiNx58kKCr4ATzhZUQp_N0qbtF9W3O6Wa2jZLwdnGIHR3DT5dVMtMux23gz7BGtcG0PJPqqLcgJd5C3O8wX4TLjLPyuQixwvlU3mCx1MMS2u-FVyBEanY_M-YPxWpH73un7ULTFF5mlJVrA3MS2D5GGzic9yXzK--5PAXpVRPBH3O8m68HNwIZEu0poPfo1jWy-O7G47roW8JPKbBB2_Hjv_P442M_axlZk-8F14s-v6RJe493mGQOKyH8hZcgYARR4WZWvCz4ZC9KCxSY74L5gDRtKqfGP--hu-yxbN3mmbYJQqiYtd44ogcLgf4pgDjWJJExYJ2lwNOVtP5yvCqmao_rsuebd5pBz2pfj36fmoxnvmLkVJ_dC-fcj5y60GHf4WxovMXrn_zTZDGjtrUd0_-8B)
+[Диаграмма контекста в модели C4.](https://www.plantuml.com/plantuml/png/L8nFImCn4CNl-HHnJolO3K9FWg0i2nwg5BP5F2rfEhY1P18o4wpVtWdu1qylxvStlmTYMxZ6e6F253oltYbrzJAzBkDscGzlk-d-Le175-ePzCgSwSwOOZ-6TrdNKoKeBY43yk1ID3bORC8DyJduanctctr3n-UTYPOOYg1bR1SN7h8ibTf3eOHzKztexYZHINRNFnyCRaNll4N1Xz_oFLBpfsXZJz4MNbC4mNDxwoSf_qVBTE5UCaEnN0iyPj-KVq3FW9I-sYI36mI1A8YsigNeqPkn1haPQs3PWmUCbk311ZR63OYoj32_8-SlQDR8ZSmCRuOVKlzolJAuuobdWniQUBHu8L8AU8YLYcfBKwp6l5HoOAA3Pwerj0CV1WGfa-cab5gNR8hTzAdvObmnQ99GDlAjof2Ij4YDb4cT1Jk2oSqlzKk_fE4TsIVEz2F9ShyTUUBOXKZ_Y2Or-cHmosTpnlkxeFAPTL-sNWGzUgaH3EBiwkHeDhyUgxLmKUot-c-y0G00)
 
 Исходный `PlantUML` файл диаграммы контекста находится в [docs/monolithic.puml](docs/monolithic.puml).
 
