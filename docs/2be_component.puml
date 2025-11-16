@@ -1,0 +1,76 @@
+@startuml C4_Component_ToBeSystem_UserService
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container(web_app, "Web App", "", "")
+Container(api_gateway, "API Gateway", "", "Роутинг + Авторизация")
+
+ContainerDb(user_db, "User DB", "PostgreSQL", "")
+
+Container_Boundary(user_service, "User Service") {
+    Component(auth_controller, "Аутентификация", "", "REST API для аутентификации")
+    Component(session_controller, "Сессии", "", "REST API для управления сессиями")
+    Component(user_controller, "Пользователи", "", "REST API для управления пользователями")
+}
+
+Rel(web_app, api_gateway, "Аутентификация, Сессии, Пользователи", "https")
+Rel(api_gateway, auth_controller, "Авторизация", "http")
+Rel(api_gateway, user_controller, "Пользователи", "http")
+Rel(api_gateway, session_controller, "Сессии", "http")
+
+Rel(auth_controller, user_db, "query", "")
+Rel(session_controller, user_db, "query", "")
+Rel(user_controller, user_db, "query", "")
+
+@enduml
+
+@startuml C4_Component_ToBeSystem_DeviceService
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container_Boundary(device_service, "Device Service") {
+}
+
+ContainerDb(device_db, "Device DB", "PostgreSQL", "")
+
+@enduml
+
+@startuml C4_Component_ToBeSystem_IntegrationService
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container_Boundary(integration_service, "Integration Service") {
+    Component(command_handler, "Command Handler", "", "Обработка команд к устройствам")
+    Component(event_handler, "Event Handler", "", "Обработка событий от устройств")
+
+    Component(router, "Router", "", "Маршрутизация запросов к адаптерам")
+
+    Component(mqtt_adapter, "MQTT Adapter", "", "Работа с MQTT устройствами")
+    Component(http_adapter, "HTTP Adapter", "", "Работа с HTTP устройствами")
+}
+
+Container_Boundary(Kafka, "Kafka") {
+    Component(kafka_device_events, "Device Events Topic", "", "")
+}
+
+Container(device_service, "Device Service", "", "")
+
+Rel(device_service, command_handler, "Выполнение команд", "http")
+
+System_Ext(mqtt_device, "MQTT Device", "Девайсы с общением по MQTT.")
+System_Ext(http_device, "HTTP Device", "Девайсы с общением по HTTP.")
+
+
+Rel(command_handler, router, "Маршрутизация команд", "")
+Rel(router, mqtt_adapter, "Команды MQTT", "")
+Rel(router, http_adapter, "Команды HTTP", "")
+
+Rel(mqtt_adapter, mqtt_device, "MQTT")
+Rel(http_adapter, http_device, "HTTP")
+
+Rel(mqtt_adapter, event_handler, "События MQTT", "")
+Rel(http_adapter, event_handler, "События HTTP", "")
+
+Rel(event_handler, kafka_device_events, "Публикация событий устройств", "")
+
+@enduml
