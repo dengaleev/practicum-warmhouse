@@ -91,7 +91,7 @@
 
 **Диаграмма контейнеров (Containers)**
 
-Добавьте диаграмму.
+Исходный `PlantUML` файл диаграммы контекста находится в [docs/2be_container.puml](docs/2be_container.puml).
 
 **Диаграмма компонентов (Components)**
 
