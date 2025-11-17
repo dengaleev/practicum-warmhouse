@@ -43,6 +43,8 @@ Container_Boundary(integration_service, "Integration Service") {
     Component(command_handler, "Command Handler", "", "Обработка команд к устройствам")
     Component(event_handler, "Event Handler", "", "Обработка событий от устройств")
 
+    Component(device_config, "Device Config", "", "Конфигурация устройств")
+    Component(device_config_cache, "Device Config Cache", "", "Кэш конфигурации устройств")
     Component(router, "Router", "", "Маршрутизация запросов к адаптерам")
 
     Component(mqtt_adapter, "MQTT Adapter", "", "Работа с MQTT устройствами")
@@ -50,12 +52,15 @@ Container_Boundary(integration_service, "Integration Service") {
 }
 
 Container_Boundary(Kafka, "Kafka") {
-    Component(kafka_device_events, "Device Events Topic", "", "")
+    Component(kafka_device_events, "device.events Topic", "Kafka", "")
 }
 
 Container(device_service, "Device Service", "", "")
 
 Rel(device_service, command_handler, "Выполнение команд", "http")
+Rel(command_handler, device_config, "Получение конфигурации устройства", "")
+Rel(device_config, device_config_cache, "Получение конфигурации устройства (кэш)", "")
+Rel(device_config, device_service, "Получение конфигурации об устройстве", "")
 
 System_Ext(mqtt_device, "MQTT Device", "Девайсы с общением по MQTT.")
 System_Ext(http_device, "HTTP Device", "Девайсы с общением по HTTP.")
@@ -72,5 +77,38 @@ Rel(mqtt_adapter, event_handler, "События MQTT", "")
 Rel(http_adapter, event_handler, "События HTTP", "")
 
 Rel(event_handler, kafka_device_events, "Публикация событий устройств", "")
+
+@enduml
+
+
+' Automation Service
+
+@startuml C4_Component_ToBeSystem_AutomationService
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "User", "Пользователь системы")
+Container(web_app, "Web App", "", "")
+Container(api_gateway, "API Gateway", "", "Роутинг + Авторизация")
+Container(integration_service, "Integration Service", "", "Интеграция с устройствами")
+ContainerDb(automation_db, "Automation DB", "PostgreSQL", "")
+
+Container_Boundary(automation_service, "Automation Service") {
+    Component(scenario_handler, "Scenario Handler", "", "Управление сценариями автоматизации")
+    Component(scenario_engine, "Scenario Engine", "", "Выполнение сценариев автоматизации")
+}
+
+Rel(user, web_app, "Использует", "https")
+Rel(web_app, api_gateway, "Управление сценариями", "https")
+Rel(api_gateway, scenario_handler, "Управление сценариями", "http")
+
+Container_Boundary(Kafka, "Kafka") {
+    Component(kafka_device_events, "device.events Topic", "Kafka", "")
+}
+
+Rel(scenario_handler, automation_db, "Чтение/запись сценариев" , "http")
+Rel(scenario_engine, automation_db, "Чтение/запись данных сценариев", "http")
+Rel(scenario_engine, kafka_device_events, "Подписка на события устройств", "http")
+Rel(scenario_engine, integration_service, "Отправка команд устройствам", "http")
 
 @enduml
