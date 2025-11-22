@@ -1,3 +1,6 @@
+' ====================
+' User Service
+' ====================
 @startuml C4_Component_ToBeSystem_UserService
 
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
@@ -24,6 +27,9 @@ Rel(user_controller, user_db, "query", "")
 
 @enduml
 
+' ====================
+' Device Service
+' ====================
 @startuml C4_Component_ToBeSystem_DeviceService
 
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
@@ -35,6 +41,9 @@ ContainerDb(device_db, "Device DB", "PostgreSQL", "")
 
 @enduml
 
+' ====================
+' Integration Service
+' ====================
 @startuml C4_Component_ToBeSystem_IntegrationService
 
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
@@ -81,8 +90,9 @@ Rel(event_handler, kafka_device_events, "Публикация событий у�
 @enduml
 
 
+' ====================
 ' Automation Service
-
+' ====================
 @startuml C4_Component_ToBeSystem_AutomationService
 
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
@@ -110,5 +120,54 @@ Rel(scenario_handler, automation_db, "Чтение/запись сценарие
 Rel(scenario_engine, automation_db, "Чтение/запись данных сценариев", "http")
 Rel(scenario_engine, kafka_device_events, "Подписка на события устройств", "http")
 Rel(scenario_engine, integration_service, "Отправка команд устройствам", "http")
+
+@enduml
+
+
+' ====================
+' Telemetry Service
+' ====================
+@startuml C4_Component_ToBeSystem_TelemetryService
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "User", "Пользователь системы")
+
+ContainerDb(telemetry_db, "Telemetry DB", "Clickhouse", "Хранение телеметрии устройств")
+ContainerDb(kafka_device_events, "Kafka", "Kafka", "")
+
+Container_Boundary(telemetry_service, "Telemetry Service") {
+    Component(telemetry_handler, "Telemetry Handler", "", "REST API для получения телеметрии устройств")
+}
+
+Rel(user, telemetry_handler, "Просмотр телеметрии", "https")
+Rel(telemetry_handler, telemetry_db, "Чтение телеметрии", "http/grpc")
+Rel(telemetry_db, kafka_device_events, "Чтение телеметрии из топика device.events", "tcp")
+
+@enduml
+
+
+' ====================
+' Video Service
+' ====================
+@startuml C4_Component_ToBeSystem_VideoService
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "User", "Пользователь системы")
+Container(device_service, "Device Service", "", "")
+System_Ext(video_provider, "Video Provider", "Внешний сервис для интеграции видеокамер")
+
+Container_Boundary(video_service, "Video Service") {
+    Component(video_handler, "Video Handler", "", "REST API для просмотра видео и управления камерами")
+    Component(video_integration, "Video Integration", "", "Интеграция с внешним видеосервисом")
+}
+
+Rel(user, video_handler, "Просмотр видео", "https")
+Rel(user, video_handler, "Управление камерами", "https")
+
+Rel(video_handler, video_integration, "Запросы к внешнему видеосервису", "http")
+Rel(video_integration, device_service, "Получение информации о камерах", "http")
+Rel(video_integration, video_provider, "API вызовы", "https")
 
 @enduml
