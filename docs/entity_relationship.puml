@@ -10,16 +10,27 @@ entity "User" as User {
   * updated_at : DateTime
 }
 
+entity "Session" as Session {
+  * session_id : UUID
+  --
+  * user_id : UUID
+  * token_hash : String
+  * created_at : DateTime
+  * expires_at : DateTime?
+  * revoked_at : DateTime?
+}
+
 entity "Location" as Location {
   * location_id : UUID
   --
   * user_id : UUID
   * name : String
   * description : String
-  * coordinates : String
+  * longitude : Decimal
+  * latitude : Decimal
   * created_at : DateTime
   * updated_at : DateTime
-  * deleted_at : DateTime
+  * deleted_at : DateTime?
 }
 
 entity "Device" as Device {
@@ -32,7 +43,7 @@ entity "Device" as Device {
   * description : String
   * created_at : DateTime
   * updated_at : DateTime
-  * deleted_at : DateTime
+  * deleted_at : DateTime?
 }
 
 entity "DeviceConfiguration" as DeviceConfiguration {
@@ -42,28 +53,27 @@ entity "DeviceConfiguration" as DeviceConfiguration {
     * data : JSON
     * created_at : DateTime
     * updated_at : DateTime
+    * deleted_at : DateTime?
 }
 
 entity "Scenario" as Scenario {
     * scenario_id : UUID
     --
     * user_id : UUID
-    * scenario_name : String
     * name : String
     * description : String
     * data : JSON
     * created_at : DateTime
     * updated_at : DateTime
-    * deleted_at : DateTime
+    * deleted_at : DateTime?
 }
 
+User ||--o{ Session : "has"
 User ||--o{ Location : "owns"
 User ||--o{ Device : "owns"
 User ||--o{ Scenario : "owns"
 
 Location ||--o{ Device : "contains"
-
 Device ||--|| DeviceConfiguration : "has"
-
 
 @enduml
