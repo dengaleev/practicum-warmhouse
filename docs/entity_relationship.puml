@@ -1,0 +1,69 @@
+@startuml
+
+entity "User" as User {
+  * user_id : UUID
+  --
+  * email : String
+  * password_hash : String
+  * name : String
+  * created_at : DateTime
+  * updated_at : DateTime
+}
+
+entity "Location" as Location {
+  * location_id : UUID
+  --
+  * user_id : UUID
+  * name : String
+  * description : String
+  * coordinates : String
+  * created_at : DateTime
+  * updated_at : DateTime
+  * deleted_at : DateTime
+}
+
+entity "Device" as Device {
+  * device_id : UUID
+  --
+  * user_id : UUID
+  * location_id : UUID
+  * device_type: enum
+  * name : String
+  * description : String
+  * created_at : DateTime
+  * updated_at : DateTime
+  * deleted_at : DateTime
+}
+
+entity "DeviceConfiguration" as DeviceConfiguration {
+    * config_id : UUID
+    --
+    * device_id : UUID
+    * data : JSON
+    * created_at : DateTime
+    * updated_at : DateTime
+}
+
+entity "Scenario" as Scenario {
+    * scenario_id : UUID
+    --
+    * user_id : UUID
+    * scenario_name : String
+    * name : String
+    * description : String
+    * data : JSON
+    * created_at : DateTime
+    * updated_at : DateTime
+    * deleted_at : DateTime
+}
+
+User ||--o{ Location : "owns"
+User ||--o{ Device : "owns"
+User ||--o{ Scenario : "owns"
+
+Location ||--o{ Device : "contains"
+
+Device ||--|| DeviceConfiguration : "has"
+
+
+@enduml
