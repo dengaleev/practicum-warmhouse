@@ -5,25 +5,31 @@
 
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
-Container(web_app, "Web App", "", "")
+Person(user, "User", "Пользователь системы")
 Container(api_gateway, "API Gateway", "", "Роутинг + Авторизация")
-
 ContainerDb(user_db, "User DB", "PostgreSQL", "")
 
 Container_Boundary(user_service, "User Service") {
-    Component(auth_controller, "Аутентификация", "", "REST API для аутентификации")
-    Component(session_controller, "Сессии", "", "REST API для управления сессиями")
-    Component(user_controller, "Пользователи", "", "REST API для управления пользователями")
+    Component(auth_handler, "Аутентификация", "", "REST API для аутентификации")
+    Component(session_handler, "Сессии", "", "REST API для управления сессиями")
+    Component(user_handler, "Пользователи", "", "REST API для управления пользователями")
+
+    Component(auth, "Auth", "", "Логика аутентификации")
+    Component(session_manager, "Session Manager", "", "Логика управления сессиями")
+    Component(user_manager, "User Manager", "", "Логика управления пользователями")
 }
 
-Rel(web_app, api_gateway, "Аутентификация, Сессии, Пользователи", "https")
-Rel(api_gateway, auth_controller, "Авторизация", "http")
-Rel(api_gateway, user_controller, "Пользователи", "http")
-Rel(api_gateway, session_controller, "Сессии", "http")
+Rel(user, user_handler, "Управление пользователями", "https")
+Rel(user, auth_handler, "Аутентификация", "https")
 
-Rel(auth_controller, user_db, "query", "")
-Rel(session_controller, user_db, "query", "")
-Rel(user_controller, user_db, "query", "")
+Rel(api_gateway, session_handler, "Авторизация пользовательских запросов", "http")
+Rel(auth_handler, auth, "Валидация учетных данных", "")
+Rel(auth, user_db, "Получение данных пользователей", "tcp")
+Rel(auth, session_manager, "Создание сессий", "")
+Rel(session_handler, session_manager, "Получение информации сессий", "")
+Rel(session_manager, user_db, "Получение и сохранение данных сессий", "tcp")
+Rel(user_handler, user_manager, "Управление пользователями", "")
+Rel(user_manager, user_db, "Получение и сохранение данных пользователей", "tcp")
 
 @enduml
 
@@ -34,10 +40,20 @@ Rel(user_controller, user_db, "query", "")
 
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
+Person(user, "User", "Пользователь системы")
+Container(integration_service, "Integration Service", "", "Интеграция с устройствами")
+ContainerDb(device_db, "Device DB", "PostgreSQL", "")
+
 Container_Boundary(device_service, "Device Service") {
+    Component(device_handler, "Device Handler", "", "REST API для управления устройствами")
+    Component(device_manager, "Device Manager", "", "Логика управления устройствами")
+    Component(command_manager, "Command Manager", "", "Управление командами к устройствам")
 }
 
-ContainerDb(device_db, "Device DB", "PostgreSQL", "")
+Rel(user, device_handler, "Управление устройствами", "https")
+Rel(device_handler, device_manager, "Вызовы логики управления устройствами", "")
+Rel(device_manager, device_db, "Чтение/запись данных устройств", "tcp")
+Rel(command_manager, integration_service, "Отправка команд устройствам", "http")
 
 @enduml
 
@@ -47,6 +63,11 @@ ContainerDb(device_db, "Device DB", "PostgreSQL", "")
 @startuml C4_Component_ToBeSystem_IntegrationService
 
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container(device_service, "Device Service", "", "")
+ContainerDb(kafka_device_events, "Kafka", "Kafka", "")
+System_Ext(mqtt_device, "MQTT Device", "Девайсы с общением по MQTT")
+System_Ext(http_device, "HTTP Device", "Девайсы с общением по HTTP")
 
 Container_Boundary(integration_service, "Integration Service") {
     Component(command_handler, "Command Handler", "", "Обработка команд к устройствам")
@@ -60,20 +81,9 @@ Container_Boundary(integration_service, "Integration Service") {
     Component(http_adapter, "HTTP Adapter", "", "Работа с HTTP устройствами")
 }
 
-Container_Boundary(Kafka, "Kafka") {
-    Component(kafka_device_events, "device.events Topic", "Kafka", "")
-}
-
-Container(device_service, "Device Service", "", "")
-
-Rel(device_service, command_handler, "Выполнение команд", "http")
 Rel(command_handler, device_config, "Получение конфигурации устройства", "")
 Rel(device_config, device_config_cache, "Получение конфигурации устройства (кэш)", "")
 Rel(device_config, device_service, "Получение конфигурации об устройстве", "")
-
-System_Ext(mqtt_device, "MQTT Device", "Девайсы с общением по MQTT.")
-System_Ext(http_device, "HTTP Device", "Девайсы с общением по HTTP.")
-
 
 Rel(command_handler, router, "Маршрутизация команд", "")
 Rel(router, mqtt_adapter, "Команды MQTT", "")
@@ -85,7 +95,7 @@ Rel(http_adapter, http_device, "HTTP")
 Rel(mqtt_adapter, event_handler, "События MQTT", "")
 Rel(http_adapter, event_handler, "События HTTP", "")
 
-Rel(event_handler, kafka_device_events, "Публикация событий устройств", "")
+Rel(event_handler, kafka_device_events, "Публикация событий устройств в топик device.events", "tcp")
 
 @enduml
 
@@ -98,28 +108,21 @@ Rel(event_handler, kafka_device_events, "Публикация событий у�
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 Person(user, "User", "Пользователь системы")
-Container(web_app, "Web App", "", "")
-Container(api_gateway, "API Gateway", "", "Роутинг + Авторизация")
 Container(integration_service, "Integration Service", "", "Интеграция с устройствами")
 ContainerDb(automation_db, "Automation DB", "PostgreSQL", "")
+ContainerDb(kafka_device_events, "Kafka", "Kafka", "")
 
 Container_Boundary(automation_service, "Automation Service") {
     Component(scenario_handler, "Scenario Handler", "", "Управление сценариями автоматизации")
     Component(scenario_engine, "Scenario Engine", "", "Выполнение сценариев автоматизации")
 }
 
-Rel(user, web_app, "Использует", "https")
-Rel(web_app, api_gateway, "Управление сценариями", "https")
-Rel(api_gateway, scenario_handler, "Управление сценариями", "http")
-
-Container_Boundary(Kafka, "Kafka") {
-    Component(kafka_device_events, "device.events Topic", "Kafka", "")
-}
+Rel(user, scenario_handler, "Управление сценариями", "https")
 
 Rel(scenario_handler, automation_db, "Чтение/запись сценариев" , "http")
 Rel(scenario_engine, automation_db, "Чтение/запись данных сценариев", "http")
-Rel(scenario_engine, kafka_device_events, "Подписка на события устройств", "http")
 Rel(scenario_engine, integration_service, "Отправка команд устройствам", "http")
+Rel(scenario_engine, kafka_device_events, "Подписка на события из топика device.events", "tcp")
 
 @enduml
 
@@ -142,7 +145,7 @@ Container_Boundary(telemetry_service, "Telemetry Service") {
 
 Rel(user, telemetry_handler, "Просмотр телеметрии", "https")
 Rel(telemetry_handler, telemetry_db, "Чтение телеметрии", "http/grpc")
-Rel(telemetry_db, kafka_device_events, "Чтение телеметрии из топика device.events", "tcp")
+Rel(telemetry_db, kafka_device_events, "Подписка на события из топика device.events", "tcp")
 
 @enduml
 
@@ -165,9 +168,11 @@ Container_Boundary(video_service, "Video Service") {
 
 Rel(user, video_handler, "Просмотр видео", "https")
 Rel(user, video_handler, "Управление камерами", "https")
+Rel(user, video_provider, "Просмотр видео", "https")
 
-Rel(video_handler, video_integration, "Запросы к внешнему видеосервису", "http")
-Rel(video_integration, device_service, "Получение информации о камерах", "http")
+Rel(video_handler, video_integration, "Запуск просмотра видео", "")
+Rel(video_handler, video_integration, "Управление видеоустройством", "")
+Rel(video_integration, device_service, "Получение информации о видеоустройстве", "http")
 Rel(video_integration, video_provider, "API вызовы", "https")
 
 @enduml
