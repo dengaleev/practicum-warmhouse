@@ -1,0 +1,25 @@
+name: Generate PlantUML
+
+on:
+  push:
+    branches:
+      - main
+      - warmhouse
+    paths:
+      - "docs/**.puml"
+
+jobs:
+  generate_plantuml:
+    runs-on: ubuntu-latest
+    name: plantuml
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate PlantUML diagrams
+        uses: grassedge/generate-plantuml-action@v1.5
+        with:
+          path: docs
+          message: "Render PlantUML files"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
