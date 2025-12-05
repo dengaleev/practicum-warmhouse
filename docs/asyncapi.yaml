@@ -1,0 +1,72 @@
+asyncapi: 2.6.0
+info:
+  title: Smart Home Async API
+  version: 1.0.0
+  description: Асинхронное взаимодействие между микросервисами через Kafka
+
+servers:
+  production:
+    url: kafka:9092
+    protocol: kafka
+
+channels:
+  device.events:
+    description: События от устройств (телеметрия, изменение статуса)
+    subscribe:
+      operationId: onDeviceEvent
+      message:
+        $ref: '#/components/messages/DeviceEvent'
+
+  device.commands:
+    description: Команды к устройствам
+    subscribe:
+      operationId: onDeviceCommand
+      message:
+        $ref: '#/components/messages/DeviceCommand'
+
+components:
+  messages:
+    DeviceEvent:
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/DeviceEventPayload'
+
+    DeviceCommand:
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/DeviceCommandPayload'
+
+  schemas:
+    DeviceEventPayload:
+      type: object
+      properties:
+        event_id:
+          type: string
+          format: uuid
+        device_id:
+          type: string
+          format: uuid
+        event_type:
+          type: string
+        data:
+          type: object
+        timestamp:
+          type: string
+          format: date-time
+
+    DeviceCommandPayload:
+      type: object
+      properties:
+        command_id:
+          type: string
+          format: uuid
+        device_id:
+          type: string
+          format: uuid
+        command_type:
+          type: string
+        data:
+          type: object
+        timestamp:
+          type: string
+          format: date-time

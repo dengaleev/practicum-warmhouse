@@ -1,0 +1,53 @@
+@startuml C4_Container_ToBeSystem
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "Пользователь", "")
+
+System_Boundary(c1, "Smart Home System") {
+    Container(web_app, "Web App", "", "")
+    Container(api_gateway, "API Gateway", "", "Роутинг + Авторизация")
+
+    Container(user_service, "User Service", "", "Аутентификация + Пользователи")
+    Container(device_service, "Device Service", "", "Управление устройствами и их состоянием")
+    Container(automation_service, "Automation Service", "", "Сценарии и автоматизация")
+    Container(telemetry_service, "Telemetry Service", "", "Сбор телеметрии с устройств")
+    Container(integration_service, "Integration Service", "", "Интеграция с устройствами")
+    Container(video_service, "Video Service", "", "Интеграция с видеоустройствами")
+
+    ContainerDb(user_db, "User DB", "PostgreSQL", "")
+    ContainerDb(device_db, "Device DB", "PostgreSQL", "")
+    ContainerDb(automation_db, "Automation DB", "PostgreSQL", "")
+    ContainerDb(analytics_db, "Telemetry & Analytics DB", "Clickhouse", "")
+
+    ContainerQueue(kafka, "Kafka", "Kafka", "")
+}
+
+System_Ext(ext_video, "Video Service", "")
+System_Ext(devices, "Devices", "")
+
+Rel(user, web_app, "HTTPS")
+Rel(web_app, api_gateway, "REST")
+
+Rel(api_gateway, user_service, "Auth", "http")
+Rel(api_gateway, device_service, "Devices", "http")
+Rel(api_gateway, automation_service, "Scenarios", "http")
+Rel(api_gateway, telemetry_service, "Telemetry", "http")
+Rel(api_gateway, video_service, "Video", "http")
+
+Rel(user_service, user_db, "query", "")
+Rel(device_service, device_db, "query", "")
+Rel(automation_service, automation_db, "query", "")
+Rel(telemetry_service, analytics_db, "query", "")
+
+Rel(integration_service, kafka, "Publish")
+Rel(telemetry_service, kafka, "Subscribe")
+Rel(automation_service, kafka, "Subscribe")
+
+Rel(automation_service, device_service, "Commands", "http")
+Rel(device_service, integration_service, "Commands", "http")
+Rel(integration_service, devices, "MQTT/HTTP")
+Rel(video_service, ext_video, "RTSP")
+Rel(video_service, device_service, "Device info", "http")
+
+@enduml

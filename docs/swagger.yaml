@@ -1,0 +1,350 @@
+openapi: 3.0.0
+info:
+  title: Practicum Warmhouse
+  version: 1.0.0
+
+paths:
+  /v1/location:
+    post:
+      summary: Create a new location
+      tags: [Location]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+      responses:
+        '201':
+          description: Location created successfully
+        '400':
+          description: Invalid input data
+    get:
+      summary: Get all locations
+      tags: [Location]
+      responses:
+        '200':
+          description: A list of locations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Location'
+        '500':
+          description: Server error
+    put:
+      summary: Update an existing location
+      tags: [Location]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+      responses:
+        '200':
+          description: Location updated successfully
+        '400':
+          description: Invalid input data
+        '404':
+          description: Location not found
+    delete:
+      summary: Delete a location
+      tags: [Location]
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Location deleted successfully
+        '404':
+          description: Location not found
+
+  /v1/device:
+    post:
+      summary: Create a new device
+      tags: [Device]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+      responses:
+        '201':
+          description: Device created successfully
+        '400':
+          description: Invalid input data
+    get:
+      summary: Get all devices
+      tags: [Device]
+      responses:
+        '200':
+          description: A list of devices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Device'
+        '500':
+          description: Server error
+    put:
+      summary: Update an existing device
+      tags: [Device]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+      responses:
+        '200':
+          description: Device updated successfully
+        '400':
+          description: Invalid input data
+        '404':
+          description: Device not found
+    delete:
+      summary: Delete a device
+      tags: [Device]
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Device deleted successfully
+        '404':
+          description: Device not found
+
+  /v1/device/by-location:
+    get:
+      summary: Get devices by location ID
+      tags: [Device]
+      parameters:
+        - in: query
+          name: location_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: A list of devices for the specified location
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Device'
+        '404':
+          description: Location not found
+        '500':
+          description: Server error
+
+
+  /v1/device/configuration:
+    get:
+      summary: Get device configuration by device ID
+      tags: [Device]
+      parameters:
+        - in: query
+          name: device_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Device configuration retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+        '404':
+          description: Device not found
+        '500':
+          description: Server error
+
+  /v1/device/command:
+      post:
+        summary: Send command to a device
+        tags: [Device]
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceCommand'
+        responses:
+          '200':
+            description: Command sent successfully
+          '400':
+            description: Invalid input data
+          '404':
+            description: Device not found
+
+  /v1/device/telemetry:
+    get:
+      summary: Get telemetry data for a device
+      tags: [Device]
+      parameters:
+        - in: query
+          name: device_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: start_dt
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: end_dt
+          required: true
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Telemetry data retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TelemetryEvent'
+              example:
+                - device_id: "123e4567-e89b-12d3-a456-426614174000"
+                  event_type: "TEMPERATURE_CHANGED"
+                  data:
+                    temperature: 22.5
+                    unit: "Celsius"
+                  dt: "2025-11-23T10:15:30Z"
+                - device_id: "123e4567-e89b-12d3-a456-426614174000"
+                  event_type: "HUMIDITY_CHANGED"
+                  data:
+                    humidity: 45
+                    unit: "Percent"
+                  dt: "2025-11-23T10:20:30Z"
+        '404':
+          description: Device not found
+        '500':
+          description: Server error
+
+components:
+  schemas:
+    Location:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        latitude:
+          type: string
+          format: decimal
+          example: "38.9072"
+        longitude:
+          type: string
+          format: decimal
+          example: "77.0369"
+      required:
+        - id
+        - name
+        - description
+        - latitude
+        - longitude
+      example:
+        id: "987fcdeb-51a2-3bc4-d567-890123456789"
+        name: "Дом на даче"
+        description: "Загородный дом в Подмосковье"
+        latitude: "55.7558"
+        longitude: "37.6173"
+
+    Device:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [thermostat, sensor, switch, camera, gate]
+        status:
+          type: string
+          enum: [online, offline, error]
+        name:
+          type: string
+        description:
+          type: string
+        location_id:
+          type: string
+          format: uuid
+      required:
+        - id
+        - name
+        - type
+        - location_id
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        type: "thermostat"
+        status: "online"
+        name: "Термостат гостиная"
+        description: "Основной термостат в гостиной"
+        location_id: "987fcdeb-51a2-3bc4-d567-890123456789"
+
+    DeviceCommand:
+      type: object
+      properties:
+        device_id:
+          type: string
+          format: uuid
+        command_type:
+          type: string
+          enum: [SET_TEMPERATURE, TURN_ON, TURN_OFF, OPEN, CLOSE]
+        parameters:
+          type: object
+      required:
+        - device_id
+        - command_type
+        - parameters
+      example:
+        device_id: "123e4567-e89b-12d3-a456-426614174000"
+        command_type: "SET_TEMPERATURE"
+        parameters:
+          target_temperature: 24.0
+          unit: "Celsius"
+
+    TelemetryEvent:
+      type: object
+      properties:
+        device_id:
+          type: string
+          format: uuid
+        event_type:
+          type: string
+        data:
+          type: object
+        dt:
+          type: string
+          format: date-time
+      required:
+        - device_id
+        - event_type
+        - data
+        - dt

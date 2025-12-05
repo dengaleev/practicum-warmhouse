@@ -1,0 +1,34 @@
+' ====================
+' User Service
+' ====================
+@startuml C4_Component_ToBeSystem_UserService
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "User", "Пользователь системы")
+Container(api_gateway, "API Gateway", "", "Роутинг + Авторизация")
+ContainerDb(user_db, "User DB", "PostgreSQL", "")
+
+Container_Boundary(user_service, "User Service") {
+    Component(auth_handler, "Аутентификация", "", "REST API для аутентификации")
+    Component(session_handler, "Сессии", "", "REST API для управления сессиями")
+    Component(user_handler, "Пользователи", "", "REST API для управления пользователями")
+
+    Component(auth, "Auth", "", "Логика аутентификации")
+    Component(session_manager, "Session Manager", "", "Логика управления сессиями")
+    Component(user_manager, "User Manager", "", "Логика управления пользователями")
+}
+
+Rel(user, user_handler, "Управление пользователями", "https")
+Rel(user, auth_handler, "Аутентификация", "https")
+
+Rel(api_gateway, session_handler, "Авторизация пользовательских запросов", "http")
+Rel(auth_handler, auth, "Валидация учетных данных", "")
+Rel(auth, user_db, "Получение данных пользователей", "tcp")
+Rel(auth, session_manager, "Создание сессий", "")
+Rel(session_handler, session_manager, "Получение информации сессий", "")
+Rel(session_manager, user_db, "Получение и сохранение данных сессий", "tcp")
+Rel(user_handler, user_manager, "Управление пользователями", "")
+Rel(user_manager, user_db, "Получение и сохранение данных пользователей", "tcp")
+
+@enduml
