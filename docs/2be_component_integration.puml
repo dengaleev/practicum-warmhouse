@@ -5,8 +5,8 @@
 
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
-Container(device_service, "Device Service", "", "")
-ContainerDb(kafka_device_events, "Kafka", "Kafka", "")
+Container(device_service, "Device Service", "", "Управление устройствами")
+ContainerDb(kafka_device_events, "Kafka", "Kafka", "Брокер сообщений")
 System_Ext(mqtt_device, "MQTT Device", "Девайсы с общением по MQTT")
 System_Ext(http_device, "HTTP Device", "Девайсы с общением по HTTP")
 
@@ -22,6 +22,7 @@ Container_Boundary(integration_service, "Integration Service") {
     Component(http_adapter, "HTTP Adapter", "", "Работа с HTTP устройствами")
 }
 
+Rel(device_service, command_handler, "Команды к устройствам", "http")
 Rel(command_handler, device_config, "Получение конфигурации устройства", "")
 Rel(device_config, device_config_cache, "Получение конфигурации устройства (кэш)", "")
 Rel(device_config, device_service, "Получение конфигурации об устройстве", "")

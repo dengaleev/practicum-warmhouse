@@ -12,10 +12,12 @@ ContainerDb(kafka_device_events, "Kafka", "Kafka", "")
 
 Container_Boundary(telemetry_service, "Telemetry Service") {
     Component(telemetry_handler, "Telemetry Handler", "", "REST API для получения телеметрии устройств")
+    Component(telemetry_consumer, "Telemetry Consumer", "", "Консьюмер событий из Kafka")
 }
 
 Rel(user, telemetry_handler, "Просмотр телеметрии", "https")
-Rel(telemetry_handler, telemetry_db, "Чтение телеметрии", "http/grpc")
-Rel(telemetry_db, kafka_device_events, "Подписка на события из топика device.events", "tcp")
+Rel(telemetry_handler, telemetry_db, "Чтение телеметрии", "tcp")
+Rel(telemetry_consumer, kafka_device_events, "Подписка на события из топика device.events", "tcp")
+Rel(telemetry_consumer, telemetry_db, "Запись телеметрии", "tcp")
 
 @enduml

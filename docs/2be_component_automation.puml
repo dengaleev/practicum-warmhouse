@@ -6,7 +6,7 @@
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 Person(user, "User", "Пользователь системы")
-Container(integration_service, "Integration Service", "", "Интеграция с устройствами")
+Container(device_service, "Device Service", "", "Управление устройствами")
 ContainerDb(automation_db, "Automation DB", "PostgreSQL", "")
 ContainerDb(kafka_device_events, "Kafka", "Kafka", "")
 
@@ -19,7 +19,7 @@ Rel(user, scenario_handler, "Управление сценариями", "https"
 
 Rel(scenario_handler, automation_db, "Чтение/запись сценариев" , "http")
 Rel(scenario_engine, automation_db, "Чтение/запись данных сценариев", "http")
-Rel(scenario_engine, integration_service, "Отправка команд устройствам", "http")
+Rel(scenario_engine, device_service, "Отправка команд устройствам", "http")
 Rel(scenario_engine, kafka_device_events, "Подписка на события из топика device.events", "tcp")
 
 @enduml

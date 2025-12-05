@@ -48,5 +48,6 @@ Rel(automation_service, device_service, "Commands", "http")
 Rel(device_service, integration_service, "Commands", "http")
 Rel(integration_service, devices, "MQTT/HTTP")
 Rel(video_service, ext_video, "RTSP")
+Rel(video_service, device_service, "Device info", "http")
 
 @enduml
