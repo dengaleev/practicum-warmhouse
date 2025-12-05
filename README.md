@@ -73,15 +73,16 @@
 
 ### **4. Проблемы монолитного решения**
 
-- …
-- …
-- …
+- Текущая кодовая база ограничена одним типом устройств
+- Отсутствие авторизации и аутентификации
 
-Если вы считаете, что текущее решение не вызывает проблем, аргументируйте свою позицию.
+> Если вы считаете, что текущее решение не вызывает проблем, аргументируйте свою позицию.
+
+Сложно проводить анализ возможных проблем не зная контекста использования системы и требований к ней.
 
 ### 5. Визуализация контекста системы — диаграмма С4
 
-[Диаграмма контекста в модели C4.](https://www.plantuml.com/plantuml/png/L8nFImCn4CNl-HHnJolO3K9FWg0i2nwg5BP5F2rfEhY1P18o4wpVtWdu1qylxvStlmTYMxZ6e6F253oltYbrzJAzBkDscGzlk-d-Le175-ePzCgSwSwOOZ-6TrdNKoKeBY43yk1ID3bORC8DyJduanctctr3n-UTYPOOYg1bR1SN7h8ibTf3eOHzKztexYZHINRNFnyCRaNll4N1Xz_oFLBpfsXZJz4MNbC4mNDxwoSf_qVBTE5UCaEnN0iyPj-KVq3FW9I-sYI36mI1A8YsigNeqPkn1haPQs3PWmUCbk311ZR63OYoj32_8-SlQDR8ZSmCRuOVKlzolJAuuobdWniQUBHu8L8AU8YLYcfBKwp6l5HoOAA3Pwerj0CV1WGfa-cab5gNR8hTzAdvObmnQ99GDlAjof2Ij4YDb4cT1Jk2oSqlzKk_fE4TsIVEz2F9ShyTUUBOXKZ_Y2Or-cHmosTpnlkxeFAPTL-sNWGzUgaH3EBiwkHeDhyUgxLmKUot-c-y0G00)
+Диаграмма контекста в модели C4.
 
 Исходный `PlantUML` файл диаграммы контекста находится в [docs/monolithic.puml](docs/monolithic.puml).
 
