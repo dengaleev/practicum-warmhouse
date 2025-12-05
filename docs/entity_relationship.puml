@@ -36,9 +36,8 @@ entity "Location" as Location {
 entity "Device" as Device {
   * device_id : UUID
   --
-  * user_id : UUID
   * location_id : UUID
-  * device_type: enum
+  * device_type : enum
   * name : String
   * description : String
   * created_at : DateTime
@@ -62,18 +61,47 @@ entity "Scenario" as Scenario {
     * user_id : UUID
     * name : String
     * description : String
-    * data : JSON
+    * is_active : Boolean
     * created_at : DateTime
     * updated_at : DateTime
     * deleted_at : DateTime?
 }
 
+entity "ScenarioDevice" as ScenarioDevice {
+    * id : UUID
+    --
+    * scenario_id : UUID
+    * device_id : UUID
+    * role : enum (trigger, action)
+    * config : JSON
+    * created_at : DateTime
+    * updated_at : DateTime
+    * deleted_at : DateTime?
+}
+
+entity "TelemetryEvent" as TelemetryEvent {
+    * event_id : UUID
+    --
+    * device_id : UUID
+    * event_type : String
+    * data : JSON
+    * dt : DateTime
+}
+
+' User
 User ||--o{ Session : "has"
 User ||--o{ Location : "owns"
-User ||--o{ Device : "owns"
 User ||--o{ Scenario : "owns"
 
+' Location -> Device
 Location ||--o{ Device : "contains"
+
+' Device
 Device ||--|| DeviceConfiguration : "has"
+Device ||--o{ TelemetryEvent : "emits"
+Device ||--o{ ScenarioDevice : "used in"
+
+' Scenario -> Device (N:M через ScenarioDevice)
+Scenario ||--o{ ScenarioDevice : "uses"
 
 @enduml

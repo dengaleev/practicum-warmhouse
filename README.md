@@ -120,6 +120,8 @@
 
 Исходный `PlantUML` файл диаграммы контекста находится в [docs/entity_relationship.puml](docs/entity_relationship.puml).
 
+![ER Diagram](docs/entity_relationship.svg)
+
 # Задание 4. Создание и документирование API
 
 ### 1. Тип API
