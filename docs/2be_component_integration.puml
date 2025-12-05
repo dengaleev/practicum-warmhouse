@@ -1,0 +1,41 @@
+' ====================
+' Integration Service
+' ====================
+@startuml C4_Component_ToBeSystem_IntegrationService
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container(device_service, "Device Service", "", "")
+ContainerDb(kafka_device_events, "Kafka", "Kafka", "")
+System_Ext(mqtt_device, "MQTT Device", "Девайсы с общением по MQTT")
+System_Ext(http_device, "HTTP Device", "Девайсы с общением по HTTP")
+
+Container_Boundary(integration_service, "Integration Service") {
+    Component(command_handler, "Command Handler", "", "Обработка команд к устройствам")
+    Component(event_handler, "Event Handler", "", "Обработка событий от устройств")
+
+    Component(device_config, "Device Config", "", "Конфигурация устройств")
+    Component(device_config_cache, "Device Config Cache", "", "Кэш конфигурации устройств")
+    Component(router, "Router", "", "Маршрутизация запросов к адаптерам")
+
+    Component(mqtt_adapter, "MQTT Adapter", "", "Работа с MQTT устройствами")
+    Component(http_adapter, "HTTP Adapter", "", "Работа с HTTP устройствами")
+}
+
+Rel(command_handler, device_config, "Получение конфигурации устройства", "")
+Rel(device_config, device_config_cache, "Получение конфигурации устройства (кэш)", "")
+Rel(device_config, device_service, "Получение конфигурации об устройстве", "")
+
+Rel(command_handler, router, "Маршрутизация команд", "")
+Rel(router, mqtt_adapter, "Команды MQTT", "")
+Rel(router, http_adapter, "Команды HTTP", "")
+
+Rel(mqtt_adapter, mqtt_device, "MQTT")
+Rel(http_adapter, http_device, "HTTP")
+
+Rel(mqtt_adapter, event_handler, "События MQTT", "")
+Rel(http_adapter, event_handler, "События HTTP", "")
+
+Rel(event_handler, kafka_device_events, "Публикация событий устройств в топик device.events", "tcp")
+
+@enduml

@@ -1,0 +1,23 @@
+' ====================
+' Device Service
+' ====================
+@startuml C4_Component_ToBeSystem_DeviceService
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "User", "Пользователь системы")
+Container(integration_service, "Integration Service", "", "Интеграция с устройствами")
+ContainerDb(device_db, "Device DB", "PostgreSQL", "")
+
+Container_Boundary(device_service, "Device Service") {
+    Component(device_handler, "Device Handler", "", "REST API для управления устройствами")
+    Component(device_manager, "Device Manager", "", "Логика управления устройствами")
+    Component(command_manager, "Command Manager", "", "Управление командами к устройствам")
+}
+
+Rel(user, device_handler, "Управление устройствами", "https")
+Rel(device_handler, device_manager, "Вызовы логики управления устройствами", "")
+Rel(device_manager, device_db, "Чтение/запись данных устройств", "tcp")
+Rel(command_manager, integration_service, "Отправка команд устройствам", "http")
+
+@enduml

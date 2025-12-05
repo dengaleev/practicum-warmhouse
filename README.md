@@ -84,13 +84,31 @@
 
 **Диаграмма контейнеров (Containers)**
 
-![C4 Container Diagram](docs/2be_container.svg)
-
 Исходный `PlantUML` файл диаграммы контекста находится в [docs/2be_container.puml](docs/2be_container.puml).
+
+![C4 Container Diagram](docs/2be_container.svg)
 
 **Диаграмма компонентов (Components)**
 
-Исходный `PlantUML` файл диаграммы контекста находится в [docs/2be_component.puml](docs/2be_component.puml).
+Исходный `PlantUML` файл диаграммы контекста находятся в файлах:
+ - [docs/2be_component_automataion.puml](docs/2be_component_automataion.puml)
+ - [docs/2be_component_integration.puml](docs/2be_component_integration.puml)
+ - [docs/2be_component_user.puml](docs/2be_component_user.puml)
+ - [docs/2be_component_device.puml](docs/2be_component_device.puml)
+ - [docs/2be_component_telemetry.puml](docs/2be_component_telemetry.puml)
+ - [docs/2be_component_video.puml](docs/2be_component_video.puml)
+
+![C4 Component Diagram - Automation Service](docs/2be_component_automataion.svg)
+
+![C4 Component Diagram - Integration Service](docs/2be_component_integration.svg)
+
+![C4 Component Diagram - User Service](docs/2be_component_user.svg)
+
+![C4 Component Diagram - Device Service](docs/2be_component_device.svg)
+
+![C4 Component Diagram - Telemetry Service](docs/2be_component_telemetry.svg)
+
+![C4 Component Diagram - Video Service](docs/2be_component_video.svg)
 
 **Диаграмма кода (Code)**
 

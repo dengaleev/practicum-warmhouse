@@ -1,0 +1,26 @@
+' ====================
+' Video Service
+' ====================
+@startuml C4_Component_ToBeSystem_VideoService
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "User", "Пользователь системы")
+Container(device_service, "Device Service", "", "")
+System_Ext(video_provider, "Video Provider", "Внешний сервис для интеграции видеокамер")
+
+Container_Boundary(video_service, "Video Service") {
+    Component(video_handler, "Video Handler", "", "REST API для просмотра видео и управления камерами")
+    Component(video_integration, "Video Integration", "", "Интеграция с внешним видеосервисом")
+}
+
+Rel(user, video_handler, "Просмотр видео", "https")
+Rel(user, video_handler, "Управление камерами", "https")
+Rel(user, video_provider, "Просмотр видео", "https")
+
+Rel(video_handler, video_integration, "Запуск просмотра видео", "")
+Rel(video_handler, video_integration, "Управление видеоустройством", "")
+Rel(video_integration, device_service, "Получение информации о видеоустройстве", "http")
+Rel(video_integration, video_provider, "API вызовы", "https")
+
+@enduml

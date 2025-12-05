@@ -1,0 +1,21 @@
+' ====================
+' Telemetry Service
+' ====================
+@startuml C4_Component_ToBeSystem_TelemetryService
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "User", "Пользователь системы")
+
+ContainerDb(telemetry_db, "Telemetry DB", "Clickhouse", "Хранение телеметрии устройств")
+ContainerDb(kafka_device_events, "Kafka", "Kafka", "")
+
+Container_Boundary(telemetry_service, "Telemetry Service") {
+    Component(telemetry_handler, "Telemetry Handler", "", "REST API для получения телеметрии устройств")
+}
+
+Rel(user, telemetry_handler, "Просмотр телеметрии", "https")
+Rel(telemetry_handler, telemetry_db, "Чтение телеметрии", "http/grpc")
+Rel(telemetry_db, kafka_device_events, "Подписка на события из топика device.events", "tcp")
+
+@enduml
