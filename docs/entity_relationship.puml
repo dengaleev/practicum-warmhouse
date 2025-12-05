@@ -38,6 +38,7 @@ entity "Device" as Device {
   --
   * location_id : UUID
   * device_type : enum
+  * status : enum
   * name : String
   * description : String
   * created_at : DateTime
