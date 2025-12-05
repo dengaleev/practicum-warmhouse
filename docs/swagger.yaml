@@ -269,6 +269,13 @@ components:
         - description
         - latitude
         - longitude
+      example:
+        id: "987fcdeb-51a2-3bc4-d567-890123456789"
+        name: "Дом на даче"
+        description: "Загородный дом в Подмосковье"
+        latitude: "55.7558"
+        longitude: "37.6173"
+
     Device:
       type: object
       properties:
@@ -277,6 +284,10 @@ components:
           format: uuid
         type:
           type: string
+          enum: [thermostat, sensor, switch, camera, gate]
+        status:
+          type: string
+          enum: [online, offline, error]
         name:
           type: string
         description:
@@ -288,8 +299,14 @@ components:
         - id
         - name
         - type
-        - description
         - location_id
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        type: "thermostat"
+        status: "online"
+        name: "Термостат гостиная"
+        description: "Основной термостат в гостиной"
+        location_id: "987fcdeb-51a2-3bc4-d567-890123456789"
 
     DeviceCommand:
       type: object
@@ -299,12 +316,19 @@ components:
           format: uuid
         command_type:
           type: string
+          enum: [SET_TEMPERATURE, TURN_ON, TURN_OFF, OPEN, CLOSE]
         parameters:
           type: object
       required:
         - device_id
         - command_type
         - parameters
+      example:
+        device_id: "123e4567-e89b-12d3-a456-426614174000"
+        command_type: "SET_TEMPERATURE"
+        parameters:
+          target_temperature: 24.0
+          unit: "Celsius"
 
     TelemetryEvent:
       type: object

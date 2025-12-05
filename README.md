@@ -136,7 +136,9 @@
 
 > Здесь приложите ссылки на документацию API для микросервисов, которые вы спроектировали в первой части проектной работы. Для документирования используйте Swagger/OpenAPI или AsyncAPI.
 
-Исходный `Swagger` файл API находится в [docs/swagger.yaml](docs/swagger.yaml).
+Файлы:
+ - [docs/swagger.yaml](docs/swagger.yaml).
+ - [docs/asyncapi.yaml](docs/asyncapi.yaml).
 
 # Задание 5. Работа с docker и docker-compose
 
