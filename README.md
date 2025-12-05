@@ -91,14 +91,14 @@
 **Диаграмма компонентов (Components)**
 
 Исходный `PlantUML` файл диаграммы контекста находятся в файлах:
- - [docs/2be_component_automataion.puml](docs/2be_component_automataion.puml)
+ - [docs/2be_component_automation.puml](docs/2be_component_automation.puml)
  - [docs/2be_component_integration.puml](docs/2be_component_integration.puml)
  - [docs/2be_component_user.puml](docs/2be_component_user.puml)
  - [docs/2be_component_device.puml](docs/2be_component_device.puml)
  - [docs/2be_component_telemetry.puml](docs/2be_component_telemetry.puml)
  - [docs/2be_component_video.puml](docs/2be_component_video.puml)
 
-![C4 Component Diagram - Automation Service](docs/2be_component_automataion.svg)
+![C4 Component Diagram - Automation Service](docs/2be_component_automation.svg)
 
 ![C4 Component Diagram - Integration Service](docs/2be_component_integration.svg)
 
